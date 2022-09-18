@@ -1,15 +1,40 @@
-<div class="mx-auto md:w-2/3 w-full flex">
-  <div class="mx-auto">
-    <% if notice.present? %>
-      <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
-    <% end %>
 
-    <%= render @questionnaire %>
-
-    <%= link_to 'Edit this questionnaire', edit_questionnaire_path(@questionnaire), class: "mt-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
-    <div class="inline-block ml-2">
-      <%= button_to 'Destroy this questionnaire', questionnaire_path(@questionnaire), method: :delete, class: "mt-2 rounded-lg py-3 px-5 bg-gray-100 font-medium" %>
+<div class="w-full">
+<p id="notice"><%= notice %></p>
+    <div class="flex justify-between items-center">
+        <h1 class="font-bold text-4xl">
+            <%= @questionnaire.name %>
+        </h1>
+        <%= link_to 'Edit', edit_questionnaire_path(@questionnaire) %>|
+        <%= link_to 'Back', questionnaires_path %>
     </div>
-    <%= link_to 'Back to questionnaires', questionnaires_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
-  </div>
+
+    <div id="questionnaires" class="min-w-full">
+<% @questionnaire.questions.each do |question| %>
+    <div class="">
+        <h2><%= question.name %></h2>
+    </div>
+    <div class="">
+        <% case question.question_type %>
+        <% when 'single_choice' %>
+        <% question.answers.each do |answer| %>
+            <p>
+                <%= radio_button_tag question.id, answer.id %>
+                <%= answer.name %>
+            </p>
+        <% end %>
+        <% when 'multiple_choice' %>
+        <% question.answers.each do |answer| %>
+            <p>
+                <%= check_box_tag question.id, answer.id %>
+                <%= answer.name %>
+            </p>
+        <% end %>
+        <% when 'long_answer' %>
+        <%= text_area_tag question.id %>
+    <% end %>
+</div><% end %>
+
+    </div>
+
 </div>

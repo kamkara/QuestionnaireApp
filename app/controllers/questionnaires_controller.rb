@@ -26,10 +26,8 @@ class QuestionnairesController < ApplicationController
     respond_to do |format|
       if @questionnaire.save
         format.html { redirect_to questionnaire_url(@questionnaire), notice: "Questionnaire was successfully created." }
-        format.json { render :show, status: :created, location: @questionnaire }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @questionnaire.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -65,6 +63,8 @@ class QuestionnairesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def questionnaire_params
-      params.require(:questionnaire).permit(:name)
+      params.require(:questionnaire).permit(:name,
+          questions_attributes: [:_destroy,:id, :question_type, :name,
+          answers_attributes: [:_destroy, :id, :name]])
     end
 end
